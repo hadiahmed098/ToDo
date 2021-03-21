@@ -1,43 +1,39 @@
 <template>
   <div id="app">
-    <h1>To Do App</h1>
-    <h3>A VueJS app built for Software Saturdays Spring 2021.</h3>
-    <h3>For more information, visit our <a href="https://purdueieee.org/software">website</a>.</h3>
-    <hr >
-    <h3>Current To-Do List</h3>
-    <TaskList>
-    </TaskList>
-    <hr >
-    <h3>Finished To-Do List</h3>
+    <div id="nav">
+      <router-link to="/">Home</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import TaskList from './components/TaskList'
-
 export default {
-  name: 'App',
-  components: {
-    TaskList,
-  },
-  
+   userAuth: {
+     uid: null
+   }
 }
 </script>
 
 <style>
 #app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  width: 50%;
-  margin: 0px auto;
+  color: #2c3e50;
 }
 
-.button {
-    border: 1px solid black;
-    padding: 7px;
-    margin: 5px;
-    border-radius: 3px;
-    font-weight: bold;
-    cursor: pointer;
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
