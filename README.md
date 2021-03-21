@@ -1,4 +1,5 @@
-# todo-vue
+# ToDoApp
+Basic VueJS and Firebase ToDo App.
 
 ## Project setup
 ```

@@ -31,7 +31,7 @@
 
 <script>
 import {auth} from '../firebase'
-import user from '../App.vue'
+import userAuth from '../App.vue'
 
 export default {
   data() {
@@ -54,7 +54,7 @@ export default {
     login: function() {
       auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password)
       .then((userCred) => {
-        user.uid = userCred.user;
+        userAuth.uuid = userCred.user.uid;
         this.loginErr = false;
         this.loginGood = true;
       })
@@ -68,7 +68,7 @@ export default {
     signup: function() {
       auth.createUserWithEmailAndPassword(this.signUpForm.email, this.signUpForm.password)
       .then((userCred) => {
-        user.uid = userCred.user;
+        userAuth.uuid = userCred.user.uid;
         this.loginGood = true;
         this.loginErr = false;
       })

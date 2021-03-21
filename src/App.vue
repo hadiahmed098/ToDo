@@ -10,7 +10,7 @@
 <script>
 export default {
    userAuth: {
-     uid: null
+     uuid: null,
    }
 }
 </script>

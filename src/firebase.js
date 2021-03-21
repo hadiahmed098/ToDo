@@ -17,6 +17,7 @@ firebase.initializeApp(firebaseConfig);
 // Load required librares
 const db = firebase.database();
 const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 export {
     db,
