@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import {auth, db} from '../firebase'
-import userAuth from '../App.vue'
+import {auth, db} from '@/firebase'
+import userAuth from '@/App.vue'
 
 export default {
   data() {

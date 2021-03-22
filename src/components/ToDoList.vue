@@ -1,6 +1,6 @@
 <template>
   <div class="todo-list-wrapper">
-    <p>{{uuid}}</p>
+    <p>User ID: {{uuid}}</p>
     <slot></slot>
         <br />
         <div class="todo-item-wrapper">
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import userAuth from '../App'
-import {db} from '../firebase'
+import userAuth from '@/App'
+import {db} from '@/firebase'
 
 export default {
   name: 'ToDoList',
@@ -43,7 +43,8 @@ export default {
       })
       .catch((error) => {
         this.$emit('add', error.code);
-      })
+      });
+      this.newTodo = '';
     }
   }
 }
