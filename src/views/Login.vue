@@ -3,7 +3,7 @@
     <h2>To-Do App</h2>
     <h3>Please log in to use the To-Do App written in <a href="https://vuejs.org/" target="_blank">VueJS</a> and using <a href="https://firebase.google.com" target="_blank">Google Firebase</a></h3>
     <div v-if="loginErr">
-      There was an error while logging in. ({{loginErrCode}}: {{loginErrMsg}})
+      There was an error while logging in. ({{loginErrCode}})
     </div>
     <div v-if="loginGood">
       You have been logged in.
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {auth} from '../firebase'
+import {auth, db} from '../firebase'
 import userAuth from '../App.vue'
 
 export default {
@@ -45,7 +45,6 @@ export default {
         password: '',
       },
       loginErr: false,
-      loginErrMsg: '',
       loginErrCode: '',
       loginGood: false,
     }
@@ -57,12 +56,19 @@ export default {
         userAuth.uuid = userCred.user.uid;
         this.loginErr = false;
         this.loginGood = true;
+        this.loginForm.email = '';
+        this.loginForm.password = '';
+        this.signUpForm.email = '';
+        this.signUpForm.password = '';
       })
       .catch((error) => {
-        this.loginErrMsg = error.message;
         this.loginErrCode = error.code;
         this.loginErr = true;
         this.loginGood = false;
+        this.loginForm.email = '';
+        this.loginForm.password = '';
+        this.signUpForm.email = '';
+        this.signUpForm.password = '';
       });
     },
     signup: function() {
@@ -71,12 +77,27 @@ export default {
         userAuth.uuid = userCred.user.uid;
         this.loginGood = true;
         this.loginErr = false;
+        this.loginForm.email = '';
+        this.loginForm.password = '';
+        this.signUpForm.email = '';
+        this.signUpForm.password = '';
+
+        // initialize firebase
+        db.ref('/tasks/' + userAuth.uuid).set({dummy:'ignore'})
+        .catch((error) => {
+          this.loginErrCode = error.code;
+          this.loginGood = false;
+          this.loginErr = true;
+        });
       })
       .catch((error) => {
-        this.loginErrMsg = error.message;
         this.loginErrCode = error.code;
         this.loginErr = true;
         this.loginGood = false;
+        this.loginForm.email = '';
+        this.loginForm.password = '';
+        this.signUpForm.email = '';
+        this.signUpForm.password = '';
       });
     }
   }
