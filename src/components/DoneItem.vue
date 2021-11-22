@@ -1,9 +1,8 @@
 <template>
   <div class="item-wrapper">
     <div class="item-action-wrapper">
-        <div class="button button-done" v-on:click="done_todo">Done!</div>
+        <div class="button button-add" v-on:click="restore_done">Restore</div>
         <div class="item-text-wrapper">{{ todo.title }}</div>
-        <div class="button button-edit" v-on:click="edit_todo">Edit</div>
         <div class="button button-edit" v-on:click="view_todo">View</div>
         <div class="button button-delete" v-on:click="delete_todo">Delete</div>
     </div>
@@ -14,9 +13,9 @@
 </template>
 
 <script>
-import { delete_todo } from "@/database";
+import { delete_done } from "@/database";
 export default {
-  name: "ToDoItem",
+  name: "DoneItem",
   props: {
     todo: Object,
   },
@@ -26,22 +25,14 @@ export default {
     }
   },
   methods: {
-    edit_todo() {
-      this.$router.push({
-        name: 'Edit',
-        params: {
-          id: this.todo.id,
-        }
-      });
-    },
     view_todo() {
       this.view = !this.view;
     },
     delete_todo() {
-      delete_todo(this.todo.id);
+      delete_done(this.todo.id);
     },
-    done_todo() {
-      this.$emit('done', this.todo.id);
+    restore_done() {
+      this.$emit('restore', this.todo.id);
     },
   },
 };
@@ -67,5 +58,7 @@ export default {
   width: 40%;
   text-align: left;
   padding: 5px;
+  color: grey;
+  text-decoration:line-through;
 }
 </style>

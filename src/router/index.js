@@ -17,7 +17,28 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import( /* webpackChunkName: "login" */ '@/views/Login.vue')
+    component: () => import( /* webpackChunkName: "login" */ '@/views/Login.vue'),
+    meta: {
+      title: 'Login to ToDo App'
+    }
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: () => import(/* webpackChunkName: "edit" */ '../views/Edit.vue'),
+    props: true,
+    meta: {
+      title: 'Edit ToDo'
+    }
+  },
+  {
+    path: '/new',
+    name: 'New',
+    component: () => import(/* webpackChunkName: "new" */ '../views/New.vue'),
+    props: true,
+    meta: {
+      title: 'New ToDo'
+    }
   }
 ]
 

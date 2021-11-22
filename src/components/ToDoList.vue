@@ -1,80 +1,70 @@
 <template>
-  <div class="todo-list-wrapper">
-    <p>User ID: {{uuid}}</p>
-    <slot></slot>
-        <br />
-        <div class="todo-item-wrapper">
-            <input v-model="newTodo" placeholder="New ToDo...">
-            <div class="button-add" @click="addTodo">
-                Add
-            </div>
+    <div>
+      <div class="list-wrapper">
+        <ToDoItem v-for="todo in todo_list" v-bind:todo="todo" v-bind:key="todo.id" v-on:done="todo_done"/>
+      </div>
+      <div class="list-wrapper">
+        <div class="item-add-wrapper">
+          <div class="button button-add" v-on:click="todo_add">Add New ToDo Item</div>
         </div>
-        <div>
-            Please enter a To-Do task.
-        </div>
-  </div>
+      </div>
+    </div>
 </template>
 
 <script>
-import userAuth from '@/App'
-import {db} from '@/firebase'
-
+import ToDoItem from '@/components/ToDoItem.vue'
+import { todo_list, get_todo, delete_todo, add_done } from '@/database'
 export default {
   name: 'ToDoList',
-  props: {
-    nextID: Number,
+  components: {
+    ToDoItem,
   },
   data() {
-      return {
-          uuid: userAuth.uuid,
-          newTodo: '',
-      };
+    return {
+      nxtID: 0,
+      todo_list: [],
+    }
   },
   methods: {
-    addTodo() {
-      if(this.newTodo == '') {
-        alert("Please enter some text.")
-        return;
-      }
-
-      db.ref('/tasks/' + this.uuid + '/t' + this.nextID).set({id: this.nextID, text: this.newTodo})
-      .then (() => {
-        this.$emit('add', "Add Successful!");
-      })
-      .catch((error) => {
-        this.$emit('add', error.code);
+    todo_add() {
+      this.$router.push({
+        name: 'New',
+        params: {
+          nxtID: this.nxtID
+        }
       });
-      this.newTodo = '';
+    },
+    todo_done(id) {
+      let task = get_todo(id);
+      add_done(task.title, task.description);
+      delete_todo(id);
     }
+  },
+  mounted() {
+    this.todo_list = todo_list;
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.todo-item-wrapper {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid gray;
-  margin: 10px 0px;
-  padding: 5px;
+.list-wrapper {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-.button-add {
-  border: 1px solid black;
-  padding: 7px;
-  margin: 5px;
-  border-radius: 3px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #8936b3;
+.item-add-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid gray;
+    margin: 10px 0px;
+    padding: 5px;
 }
-
-.button-add:hover {
-  background-color: #8936b3;
-  color: white;
-  border: 1px solid white;
+@media only screen and (min-width: 750px) {
+  .list-wrapper {
+    width: 750px;
+    margin: 0 auto;
+  }
 }
 </style>

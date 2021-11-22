@@ -9,22 +9,30 @@
       You have been logged in.
     </div>
     <div>
-      <form @submit.prevent>
+      <form @submit.prevent v-if="!signup_form">
         <h3>Log In</h3>
         <label for="email">Email</label>
         <input v-model.trim="loginForm.email" type="text" placeholder="Enter email..." id="email" />
+        <br><br>
         <label for="password">Password</label>
         <input v-model.trim="loginForm.password" type="password" placeholder="Enter password..." id="password" />
-        <button @click="login" class="button">Log In</button>
+        <br><br>
+        <button @click="login_complete" class="button">Log In</button>
       </form>
-      <form @submit.prevent>
+
+      <form @submit.prevent v-if="signup_form">
         <h3>Sign Up</h3>
         <label for="email1">Email</label>
         <input v-model.trim="signUpForm.email" type="text" placeholder="Enter email..." id="email1" />
+        <br><br>
         <label for="password1">Password</label>
         <input v-model.trim="signUpForm.password" type="password" placeholder="Enter password..." id="password1" />
-        <button @click="signup" class="button">Log In</button>
+        <br><br>
+        <button @click="signup_complete" class="button">Sign Up</button>
       </form>
+      <br><br>
+      <span v-if="!signup_form" @click="goToSignup">Don't have an account? Sign up today!</span>
+      <span v-if="signup_form" @click="goToSignup">Log in with an existing account</span>
     </div>
   </div>
 </template>
@@ -47,10 +55,11 @@ export default {
       loginErr: false,
       loginErrCode: '',
       loginGood: false,
+      signup_form: false,
     }
   },
   methods: {
-    login: function() {
+    login_complete() {
       auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password)
       .then((userCred) => {
         userAuth.uuid = userCred.user.uid;
@@ -60,6 +69,10 @@ export default {
         this.loginForm.password = '';
         this.signUpForm.email = '';
         this.signUpForm.password = '';
+        this.$router.push({
+          name: 'Home',
+        });
+
       })
       .catch((error) => {
         this.loginErrCode = error.code;
@@ -71,7 +84,7 @@ export default {
         this.signUpForm.password = '';
       });
     },
-    signup: function() {
+    signup_complete() {
       auth.createUserWithEmailAndPassword(this.signUpForm.email, this.signUpForm.password)
       .then((userCred) => {
         userAuth.uuid = userCred.user.uid;
@@ -99,7 +112,28 @@ export default {
         this.signUpForm.email = '';
         this.signUpForm.password = '';
       });
+    },
+    goToSignup() {
+      this.signup_form = !this.signup_form;
     }
   }
 }
 </script>
+
+<style scoped>
+form {
+  border: 2px solid black;
+  border-radius: 3px;
+  width: 750px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media only screen and (max-width: 750px) {
+  form {
+    border: 2px solid black;
+    border-radius: 3px;
+    text-align: center;
+  }
+}
+</style>
